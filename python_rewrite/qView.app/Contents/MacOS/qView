@@ -1,0 +1,11 @@
+#!/bin/bash
+# qView macOS launcher script
+
+# Get the directory where this script is located
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Set PYTHONPATH to include the Resources directory
+export PYTHONPATH="$DIR/../Resources:$PYTHONPATH"
+
+# Launch the Python application
+exec python3 "$DIR/../Resources/main.py" "$@"

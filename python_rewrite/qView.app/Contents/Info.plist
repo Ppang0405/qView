@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>qView</string>
+    <key>CFBundleDisplayName</key>
+    <string>qView</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.qview.python</string>
+    <key>CFBundleVersion</key>
+    <string>1.0.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleExecutable</key>
+    <string>qView</string>
+    <key>CFBundleIconFile</key>
+    <string>qView.icns</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.12</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Image files</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>jpg</string>
+                <string>jpeg</string>
+                <string>png</string>
+                <string>gif</string>
+                <string>bmp</string>
+                <string>svg</string>
+                <string>webp</string>
+                <string>tiff</string>
+                <string>tif</string>
+            </array>
+            <key>CFBundleTypeMIMETypes</key>
+            <array>
+                <string>image/jpeg</string>
+                <string>image/png</string>
+                <string>image/gif</string>
+                <string>image/bmp</string>
+                <string>image/svg+xml</string>
+                <string>image/webp</string>
+                <string>image/tiff</string>
+            </array>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+        </dict>
+    </array>
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.qview.image</string>
+            <key>UTTypeDescription</key>
+            <string>qView Image</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.image</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>jpg</string>
+                    <string>jpeg</string>
+                    <string>png</string>
+                    <string>gif</string>
+                    <string>bmp</string>
+                    <string>svg</string>
+                    <string>webp</string>
+                    <string>tiff</string>
+                    <string>tif</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
