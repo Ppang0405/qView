@@ -21,7 +21,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="223"/>
         <source>&amp;Go</source>
-        <translation>П&amp;ереход</translation>
+        <translation>&amp;Переход</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="252"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="660"/>
         <source>&amp;Quit</source>
-        <translation>В&amp;ыход</translation>
+        <translation>&amp;Выход</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="664"/>

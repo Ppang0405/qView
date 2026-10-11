@@ -83,7 +83,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="676"/>
         <source>Re&amp;load File</source>
-        <translation type="unfinished"></translation>
+        <translation>Her&amp;laad Bestand</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="680"/>
@@ -131,7 +131,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="709"/>
         <source>Delete Permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Permanent verwijderen</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="713"/>
@@ -262,7 +262,7 @@
         <location filename="../src/actionmanager.cpp" line="812"/>
         <source>&amp;Settings</source>
         <extracomment>This is for the options dialog on windows</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Instellingen</translation>
     </message>
     <message>
         <source>Option&amp;s</source>
@@ -283,7 +283,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="818"/>
         <source>Setting&amp;s...</source>
-        <translation type="unfinished"></translation>
+        <translation>Instelling&amp;en...</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="823"/>
@@ -399,7 +399,7 @@ Geen toestemming om te overschrijven of bestand is alleen-lezen.</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="792"/>
         <source>Are you sure you want to delete %1 permanently? This can&apos;t be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet u zeker dat u %1 definitief wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="799"/>
@@ -437,7 +437,9 @@ Geen toestemming om te overschrijven of bestand is alleen-lezen.</translation>
         <source>Error occurred opening
 %3
 %2 (Error %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een fout opgetreden bij het openen van
+%3
+%2 (Fout %1)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="855"/>
@@ -981,22 +983,22 @@ Geen toestemming om te overschrijven of bestand is alleen-lezen.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="457"/>
         <source>Color space conversion:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleurruimteconversie:</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="476"/>
         <source>Auto-detect</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch detecteren</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="481"/>
         <source>sRGB</source>
-        <translation type="unfinished"></translation>
+        <translation>sRGB</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="486"/>
         <source>Display P3</source>
-        <translation type="unfinished"></translation>
+        <translation>Display P3</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="495"/>
@@ -1062,17 +1064,17 @@ Geen toestemming om te overschrijven of bestand is alleen-lezen.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="17"/>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="524"/>
         <source>Date Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum gewijzigd</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="529"/>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum aangemaakt</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="604"/>
@@ -1122,12 +1124,12 @@ Geen toestemming om te overschrijven of bestand is alleen-lezen.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="703"/>
         <source>Detect supported files in folder even if extension isn&apos;t recognized (may be slow with larger/network folders)</source>
-        <translation type="unfinished"></translation>
+        <translation>Detecteer ondersteunde bestanden in de map, zelfs als de extensie niet wordt herkend (kan trager zijn bij grotere/netwerkmappen)</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="706"/>
         <source>Allow &amp;MIME content detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Detectie van &amp;MIME-inhoud toestaan</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="713"/>
@@ -1148,13 +1150,13 @@ Geen toestemming om te overschrijven of bestand is alleen-lezen.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="727"/>
         <source>Skip hidden files when browsing to the next/previous file</source>
-        <translation type="unfinished"></translation>
+        <translation>Verborgen bestanden overslaan bij het bladeren naar het volgende/vorige bestand</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="730"/>
         <source>Skip hidden files</source>
         <extracomment>Don&apos;t view files with &apos;hidden&apos; attribute</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Verborgen bestanden overslaan</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="741"/>
@@ -1298,7 +1300,7 @@ Geen toestemming om te overschrijven of het bestand is alleen-lezen.</translatio
     <message>
         <location filename="../src/shortcutmanager.cpp" line="47"/>
         <source>Reload File</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand opnieuw laden</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="48"/>
@@ -1358,7 +1360,7 @@ Geen toestemming om te overschrijven of het bestand is alleen-lezen.</translatio
     <message>
         <location filename="../src/shortcutmanager.cpp" line="75"/>
         <source>Delete Permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Permanent verwijderen</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="80"/>
@@ -1463,7 +1465,7 @@ Geen toestemming om te overschrijven of het bestand is alleen-lezen.</translatio
     <message>
         <location filename="../src/shortcutmanager.cpp" line="115"/>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <source>Options</source>

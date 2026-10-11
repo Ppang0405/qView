@@ -83,7 +83,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="676"/>
         <source>Re&amp;load File</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosyayı Yeniden Yükle</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="680"/>
@@ -131,17 +131,17 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="709"/>
         <source>Delete Permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalıcı Olarak Sil</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="713"/>
         <source>&amp;Restore from Trash</source>
-        <translation>&amp;Çöp Kutusundan Geri Yükle</translation>
+        <translation>Çöp Kutusundan Geri Yükle</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="715"/>
         <source>&amp;Undo Delete</source>
-        <translation>&amp;Silme İşlemini Geri Al</translation>
+        <translation>Silme İşlemini Geri Al</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="720"/>
@@ -151,7 +151,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="724"/>
         <source>&amp;Paste</source>
-        <translation>&amp;Yapıştır</translation>
+        <translation>Yapıştır</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="727"/>
@@ -262,7 +262,7 @@
         <location filename="../src/actionmanager.cpp" line="812"/>
         <source>&amp;Settings</source>
         <extracomment>This is for the options dialog on windows</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ayarlar</translation>
     </message>
     <message>
         <source>Option&amp;s</source>
@@ -283,7 +283,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="818"/>
         <source>Setting&amp;s...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ayarlar...</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="823"/>
@@ -399,7 +399,7 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="792"/>
         <source>Are you sure you want to delete %1 permanently? This can&apos;t be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kalıcı olarak silinsin mi? Bu işlem geri alınamaz.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="799"/>
@@ -981,17 +981,17 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="457"/>
         <source>Color space conversion:</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk uzayı dönüşümü:</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="476"/>
         <source>Auto-detect</source>
-        <translation type="unfinished"></translation>
+        <translation>Kendiliğinden algıla</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="481"/>
         <source>sRGB</source>
-        <translation type="unfinished"></translation>
+        <translation>sRGB</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="486"/>
@@ -1062,17 +1062,17 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="17"/>
         <source>Settings</source>
-        <translation type="unfinished">Ayarlar</translation>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="524"/>
         <source>Date Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Değiştirilme Tarihi</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="529"/>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Oluşturulma Tarihi</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="604"/>
@@ -1122,12 +1122,12 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="703"/>
         <source>Detect supported files in folder even if extension isn&apos;t recognized (may be slow with larger/network folders)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzantı tanınmasa bile klasördeki desteklenen dosyaları algıla (büyük/ağ klasörlerinde yavaş olabilir)</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="706"/>
         <source>Allow &amp;MIME content detection</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIME içerik algılamasına izin ver</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="713"/>
@@ -1148,13 +1148,13 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="727"/>
         <source>Skip hidden files when browsing to the next/previous file</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki/Sonraki dosyalara göz atarken gizli dosyaları atla</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="730"/>
         <source>Skip hidden files</source>
         <extracomment>Don&apos;t view files with &apos;hidden&apos; attribute</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Gizli dosyaları atla</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="741"/>
@@ -1298,7 +1298,7 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="47"/>
         <source>Reload File</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosyayı Yeniden Yükle</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="48"/>
@@ -1358,7 +1358,7 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="75"/>
         <source>Delete Permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalıcı Olarak Sil</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="80"/>
@@ -1463,7 +1463,7 @@ Yazma izni yok veya dosya salt okunur.</translation>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="115"/>
         <source>Settings</source>
-        <translation type="unfinished">Ayarlar</translation>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <source>Options</source>

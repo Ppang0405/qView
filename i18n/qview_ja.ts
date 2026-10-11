@@ -83,7 +83,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="676"/>
         <source>Re&amp;load File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルの再読込(&amp;L)</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="680"/>
@@ -131,7 +131,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="709"/>
         <source>Delete Permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>完全に削除</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="713"/>
@@ -262,7 +262,7 @@
         <location filename="../src/actionmanager.cpp" line="812"/>
         <source>&amp;Settings</source>
         <extracomment>This is for the options dialog on windows</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>設定(&amp;S)</translation>
     </message>
     <message>
         <source>Option&amp;s</source>
@@ -283,7 +283,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="818"/>
         <source>Setting&amp;s...</source>
-        <translation type="unfinished"></translation>
+        <translation>設定(&amp;S)...</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="823"/>
@@ -399,7 +399,7 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="792"/>
         <source>Are you sure you want to delete %1 permanently? This can&apos;t be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 を完全に削除してもよろしいですか? 元に戻すことはできません。</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="799"/>
@@ -467,7 +467,7 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="1097"/>
         <source>Res&amp;ume</source>
-        <translation>元に戻す</translation>
+        <translation>元に戻す(&amp;U)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1106"/>
@@ -477,12 +477,12 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="1129"/>
         <source>Start S&amp;lideshow</source>
-        <translation>スライドショーの開始</translation>
+        <translation>スライドショーの開始(&amp;L)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1138"/>
         <source>Stop S&amp;lideshow</source>
-        <translation>スライドショーの停止</translation>
+        <translation>スライドショーの停止(&amp;L)</translation>
     </message>
 </context>
 <context>
@@ -513,7 +513,7 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/main.cpp" line="18"/>
         <source>The file to open.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを開く。</translation>
     </message>
 </context>
 <context>
@@ -565,7 +565,7 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/qvapplication.cpp" line="349"/>
         <source>Supported Images</source>
-        <translation type="unfinished"></translation>
+        <translation>サポート画像形式</translation>
     </message>
     <message>
         <location filename="../src/qvapplication.cpp" line="404"/>
@@ -920,7 +920,7 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="312"/>
         <source>Zoom amount:</source>
-        <translation type="unfinished">拡大量</translation>
+        <translation>ズーム量:</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="341"/>
@@ -981,17 +981,17 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="457"/>
         <source>Color space conversion:</source>
-        <translation type="unfinished"></translation>
+        <translation>色空間変換:</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="476"/>
         <source>Auto-detect</source>
-        <translation type="unfinished"></translation>
+        <translation>自動検出</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="481"/>
         <source>sRGB</source>
-        <translation type="unfinished"></translation>
+        <translation>sRGB</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="486"/>
@@ -1067,12 +1067,12 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="524"/>
         <source>Date Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="529"/>
         <source>Date Created</source>
-        <translation type="unfinished"></translation>
+        <translation>作成日</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="604"/>
@@ -1122,12 +1122,12 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="703"/>
         <source>Detect supported files in folder even if extension isn&apos;t recognized (may be slow with larger/network folders)</source>
-        <translation type="unfinished"></translation>
+        <translation>拡張子が認識されない場合でも、フォルダ内のサポートされているファイルを検出（大きいフォルダーやネットワークフォルダーでは遅くなる可能性があります）</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="706"/>
         <source>Allow &amp;MIME content detection</source>
-        <translation type="unfinished"></translation>
+        <translation>MIME コンテンツ検出を許可(&amp;M)</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="713"/>
@@ -1148,13 +1148,13 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="727"/>
         <source>Skip hidden files when browsing to the next/previous file</source>
-        <translation type="unfinished"></translation>
+        <translation>次のファイル/前のファイルを参照するときに隠しファイルをスキップ</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="730"/>
         <source>Skip hidden files</source>
         <extracomment>Don&apos;t view files with &apos;hidden&apos; attribute</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>隠しファイルをスキップ</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="741"/>
@@ -1298,7 +1298,7 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="47"/>
         <source>Reload File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを再読み込み</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="48"/>
@@ -1358,7 +1358,7 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="75"/>
         <source>Delete Permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>完全に削除</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="80"/>

@@ -16,7 +16,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="211"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Serrast bike</translation>
+        <translation>&amp;Biguherîne</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="229"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/actionmanager.cpp" line="663"/>
         <source>Open &amp;URL...</source>
-        <translation>&amp;URL veke...</translation>
+        <translation>&amp;Girêdanê veke...</translation>
     </message>
     <message>
         <location filename="../src/actionmanager.cpp" line="666"/>
@@ -334,12 +334,12 @@
         <location filename="../src/mainwindow.cpp" line="793"/>
         <location filename="../src/mainwindow.cpp" line="801"/>
         <source>Error</source>
-        <translation>Çewtî</translation>
+        <translation>Şaşetî</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="563"/>
         <source>Error: URL is invalid</source>
-        <translation>Çewtî: URL ne derbasdar e</translation>
+        <translation>Şaşetî: Girêdan ne derbasdar e</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="569"/>
@@ -355,22 +355,22 @@
         <location filename="../src/mainwindow.cpp" line="573"/>
         <location filename="../src/mainwindow.cpp" line="629"/>
         <source>Open URL...</source>
-        <translation>URL veke...</translation>
+        <translation>Girêdanê veke...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="590"/>
         <source>Error </source>
-        <translation>Çewtî </translation>
+        <translation>Şaşetî </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="613"/>
         <source>Error: Invalid image</source>
-        <translation>Çewtî: Wêneyê nederbasdar</translation>
+        <translation>Şaşetî: Wêneyê nederbasdar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="630"/>
         <source>URL of a supported image file:</source>
-        <translation>URL a pela wêneyê piştgirî:</translation>
+        <translation>Girêdana pela wêneyê piştgirî:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="685"/>
@@ -528,7 +528,7 @@ Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translati
     <message>
         <location filename="../src/qvaboutdialog.cpp" line="102"/>
         <source>Error checking for updates</source>
-        <translation>Di kontrolkirina rojanekirinan de çewtî</translation>
+        <translation>Di kontrolkirina rojanekirinan de şaşetî derket</translation>
     </message>
 </context>
 <context>
@@ -562,14 +562,14 @@ Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translati
     <message>
         <location filename="../src/qvgraphicsview.cpp" line="621"/>
         <source>Error</source>
-        <translation>Çewtî</translation>
+        <translation>Şaşetî</translation>
     </message>
     <message>
         <location filename="../src/qvgraphicsview.cpp" line="621"/>
         <source>Error occurred opening &quot;%3&quot;:
 %2 (Error %1)</source>
-        <translation>Di vekirina &quot;%3&quot; çewtî çê bû:
-%2 (Çewtî %1)</translation>
+        <translation>Di vekirina &quot;%3&quot; şaşetî çê bû:
+%2 (Şaşetî %1)</translation>
     </message>
 </context>
 <context>
@@ -594,7 +594,7 @@ Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translati
         <location filename="../src/qvinfodialog.ui" line="183"/>
         <location filename="../src/qvinfodialog.ui" line="203"/>
         <source>error</source>
-        <translation>çewtî</translation>
+        <translation>şaşetî</translation>
     </message>
     <message>
         <location filename="../src/qvinfodialog.ui" line="52"/>
@@ -1131,7 +1131,7 @@ Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translati
     <message>
         <location filename="../src/qvrenamedialog.cpp" line="14"/>
         <source>Rename...</source>
-        <translation>Ji nû ve bi nav bike...</translation>
+        <translation>Navê biguherîne...</translation>
     </message>
     <message>
         <location filename="../src/qvrenamedialog.cpp" line="15"/>
@@ -1142,20 +1142,20 @@ Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translati
         <location filename="../src/qvrenamedialog.cpp" line="26"/>
         <location filename="../src/qvrenamedialog.cpp" line="45"/>
         <source>Error</source>
-        <translation>Çewtî</translation>
+        <translation>Şaşetî</translation>
     </message>
     <message>
         <location filename="../src/qvrenamedialog.cpp" line="26"/>
         <source>Could not rename %1:
 No write permission or file is read-only.</source>
-        <translation>Nikare %1 ji nû ve bi nav bike:
-Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translation>
+        <translation>Nikare navê %1 biguherîne:
+Mafdayîna nivîsandinê tune ye yan pel tenê ji bo xwendinê ye.</translation>
     </message>
     <message>
         <location filename="../src/qvrenamedialog.cpp" line="45"/>
         <source>Could not rename %1:
 (Check that all characters are valid)</source>
-        <translation>Nikare %1 ji nû ve bi nav bike:
+        <translation>Nikare navê %1 biguherîne:
 (Kontrol bike ka hemû tîp derbasdar in)</translation>
     </message>
 </context>
@@ -1211,7 +1211,7 @@ Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translati
     <message>
         <location filename="../src/shortcutmanager.cpp" line="46"/>
         <source>Open URL</source>
-        <translation>URL veke</translation>
+        <translation>Girêdanê veke</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="47"/>
@@ -1256,7 +1256,7 @@ Mafdayîna nivîsandinê tune ye an jî pel tenê ji bo xwendinê ye.</translati
     <message>
         <location filename="../src/shortcutmanager.cpp" line="61"/>
         <source>Rename</source>
-        <translation>Ji nû ve bi nav bike</translation>
+        <translation>Navê biguherîne</translation>
     </message>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="65"/>

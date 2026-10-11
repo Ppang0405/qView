@@ -6,6 +6,8 @@
 #include <QWindow>
 #include <QMenu>
 
+class QWidget;
+
 class QVCocoaFunctions
 {
 public:
@@ -15,9 +17,15 @@ public:
 
     static void setFullSizeContentView(QWindow *window, const bool enable);
 
-    static void setVibrancy(bool alwaysDark, QWindow *window);
+    static void setVibrancy(bool isHidden, bool alwaysDark, QWindow *window);
 
     static int getObscuredHeight(QWindow *window);
+
+    static int getTitlebarHeight(QWindow *window);
+
+    static bool startSystemMove(QWidget *widget);
+
+    static void performWindowDrag(QWidget *widget);
 
     static void closeWindow(QWindow *window);
 

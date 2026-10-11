@@ -35,7 +35,9 @@ public:
 
     void refreshProperties();
 
-    void buildWindowTitle();
+    void updateWindowTitle();
+
+    void updateWindowFilePath();
 
     void setWindowSize();
 
@@ -113,7 +115,10 @@ public:
 
     int getTitlebarOverlap() const;
 
-    const QVImageCore::FileDetails& getCurrentFileDetails() const { return graphicsView->getCurrentFileDetails(); }
+    const QVImageCore::FileDetails &getCurrentFileDetails() const
+    {
+        return graphicsView->getCurrentFileDetails();
+    }
 
 public slots:
     void openFile(const QString &fileName);
@@ -144,6 +149,8 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     void paintEvent(QPaintEvent *event) override;
+
+    void fullscreenChanged();
 
 protected slots:
     void settingsUpdated();

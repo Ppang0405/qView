@@ -1080,7 +1080,7 @@ Engin skrifheimild eða skrá er skrifvarinn.</translation>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="17"/>
         <source>Settings</source>
-        <translation type="unfinished">Stillingar</translation>
+        <translation>Stillingar</translation>
     </message>
     <message>
         <location filename="../src/qvoptionsdialog.ui" line="524"/>
@@ -1481,7 +1481,7 @@ Engin skrifheimild eða skrá er skrifvarinn.</translation>
     <message>
         <location filename="../src/shortcutmanager.cpp" line="115"/>
         <source>Settings</source>
-        <translation type="unfinished">Stillingar</translation>
+        <translation>Stillingar</translation>
     </message>
     <message>
         <source>Options</source>

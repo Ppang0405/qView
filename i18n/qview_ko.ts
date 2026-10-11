@@ -1543,13 +1543,13 @@ No write permission or file is read-only.</source>
     <message>
         <location filename="../src/updatechecker.cpp" line="112"/>
         <source>qView Update Checking Disabled</source>
-        <translation>qView 판올림 확인이 비활성화됨</translation>
+        <translation>qView 업데이트 확인이 비활성화됨</translation>
     </message>
     <message>
         <location filename="../src/updatechecker.cpp" line="112"/>
         <source>Update notifications on startup have been disabled.
 You can reenable them in the options dialog.</source>
-        <translation>판올림 알림이 비활성화됐습니다.
+        <translation>업데이트 알림이 비활성화됐습니다.
 환경설정에서 활성화할 수 있습니다.</translation>
     </message>
 </context>
