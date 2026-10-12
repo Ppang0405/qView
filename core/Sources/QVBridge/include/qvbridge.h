@@ -9,7 +9,16 @@
 #include <string>
 #include <vector>
 
-struct QVFolderEntry
+// Marks a type as safe to use from Swift under strict memory safety. Equivalent to
+// SWIFT_ESCAPABLE from <swift/bridging>, without needing that header's include path.
+// (Swift 6.4 already infers this for structs of std::string and integers; 6.3 doesn't.)
+#if defined(__has_attribute) && __has_attribute(swift_attr)
+#  define QV_SWIFT_ESCAPABLE __attribute__((swift_attr("Escapable")))
+#else
+#  define QV_SWIFT_ESCAPABLE
+#endif
+
+struct QV_SWIFT_ESCAPABLE QVFolderEntry
 {
     std::string fileName; // UTF-8
     std::string mimeType; // UTF-8, only populated when sorting by type

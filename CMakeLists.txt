@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.26)
 
 project(qView VERSION 7.0 LANGUAGES CXX)
 
+# macOS includes the Swift runtime only from 10.14.4 (the app doesn't bundle one)
+if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET AND CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.14.4)
+    message(STATUS "Raising the macOS deployment target to 10.14.4 for the Swift runtime")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14.4 CACHE STRING "Minimum macOS version" FORCE)
+endif()
+
 # CMake doesn't pass the macOS architecture or deployment target to the Swift compiler,
 # so derive its target triple from them. Swift builds one architecture at a time; for a
 # universal app, build each architecture separately and merge them with lipo.

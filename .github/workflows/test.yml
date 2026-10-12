@@ -34,6 +34,21 @@ jobs:
       - name: Run Swift core tests
         run: swift test --package-path core
 
+  swift-core:
+    # macOS CI uses Xcode's Swift 6.3; Linux and Windows use 6.4. Test the core on both.
+    name: Swift core tests (Swift ${{ matrix.swift }})
+    runs-on: ubuntu-latest
+    container: swift:${{ matrix.swift }}-noble
+    strategy:
+      fail-fast: false
+      matrix:
+        swift: ['6.3', '6.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Swift core tests
+        run: swift test --package-path core
+
   clang-tidy:
     name: Run clang-tidy
     runs-on: ubuntu-latest
