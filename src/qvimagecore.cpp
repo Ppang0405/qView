@@ -4,7 +4,6 @@
 #include "qvcocoafunctions.h"
 #include "qvlinuxx11functions.h"
 #include "qvcore.h"
-#include <cstring>
 #include <QMessageBox>
 #include <QDir>
 #include <QUrl>
@@ -339,10 +338,11 @@ void QVImageCore::updateFolderInfo(QString dirPath)
     const bool shouldSort = lastDirInfo != dirInfo;
     lastDirInfo = dirInfo;
 
-    if (shouldSort) {
-        // Sorting is implemented in Swift (core/Sources/QVCore/FolderSort.swift)
+    // Sorting is implemented in Swift (core/Sources/QVCore/FolderSort.swift)
+    const auto sortMode = QVCore::FolderSortMode::init(dirInfo.sortMode);
+    Q_ASSERT(sortMode);
+    if (shouldSort && sortMode) {
         auto &fileList = currentFileDetails.folderFileInfoList;
-        Q_ASSERT(dirInfo.sortMode >= 0 && dirInfo.sortMode <= 5);
 
         QVFolderEntryList entries;
         entries.reserve(fileList.size());
@@ -352,7 +352,7 @@ void QVImageCore::updateFolderInfo(QString dirPath)
         }
 
         const QVIndexList order =
-                QVCore::sortFolderEntries(entries, dirInfo.sortMode, dirInfo.sortDescending);
+                QVCore::sortFolderEntries(entries, sortMode.get(), dirInfo.sortDescending);
 
         QList<CompatibleFile> sortedList;
         sortedList.reserve(fileList.size());
@@ -519,42 +519,9 @@ QColorSpace QVImageCore::detectDisplayColorSpace() const
 // Workaround for QTBUG-125241
 bool QVImageCore::removeTinyDataTagsFromIccProfile(QByteArray &profile)
 {
-    const int offsetTagCount = 128;
-    const qsizetype length = profile.length();
-    qsizetype offset = offsetTagCount;
-    char *data = profile.data();
-    bool foundTinyData = false;
-    // read tag count
-    if (length - offset < 4)
-        return false;
-    quint32 tagCount = qFromBigEndian<quint32>(data + offset);
-    offset += 4;
-    // so we don't have to worry about overflows
-    if (tagCount > 99999)
-        return false;
-    // loop through tags
-    if (length - offset < qsizetype(tagCount * 12))
-        return false;
-    while (tagCount) {
-        tagCount -= 1;
-        const quint32 dataSize = qFromBigEndian<quint32>(data + offset + 8);
-        if (dataSize >= 12) {
-            // this tag is fine
-            offset += 12;
-            continue;
-        }
-        // qt will fail on this tag, remove it
-        foundTinyData = true;
-        if (tagCount) {
-            // shift subsequent tags back
-            std::memmove(data + offset, data + offset + 12, tagCount * 12);
-        }
-        // zero fill gap at end
-        std::memset(data + offset + (tagCount * 12), 0, 12);
-        // decrement tag count
-        qToBigEndian(qFromBigEndian<quint32>(data + offsetTagCount) - 1, data + offsetTagCount);
-    }
-    return foundTinyData;
+    // Implemented in Swift (core/Sources/QVCore/IccProfile.swift), on the bytes in place
+    return QVCore::removeTinyDataTagsFromIccProfile(
+            QVMutableBytes(reinterpret_cast<uint8_t *>(profile.data()), profile.size()));
 }
 #endif
 

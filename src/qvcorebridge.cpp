@@ -4,7 +4,7 @@
 
 #include <QCollator>
 
-int qvCompareStrings(const std::string &a, const std::string &b, bool numeric)
+int qvCompareStrings(const std::string &a, const std::string &b, bool numeric) noexcept
 {
     // QCollator is expensive to create, so reuse one per thread
     thread_local QCollator collator;

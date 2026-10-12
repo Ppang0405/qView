@@ -51,6 +51,5 @@ private func names(_ entries: [FolderEntry], _ mode: FolderSortMode, descending:
         list.push_back(QVFolderEntry(fileName: std.string(name), mimeType: std.string(),
                                      lastModified: 0, lastCreated: 0, size: 0))
     }
-    #expect(Array(sortFolderEntries(list, FolderSortMode.natural.rawValue, false)) == [1, 0])
-    #expect(Array(sortFolderEntries(list, 99, false)) == [0, 1])
+    #expect(Array(sortFolderEntries(list, .natural, false)) == [1, 0])
 }

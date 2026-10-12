@@ -1,7 +1,7 @@
 import CxxStdlib
 import QVBridge
 
-/// Values of the "sortmode" setting.
+/// Values of the "sortmode" setting. Also exposed to C++ as QVCore::FolderSortMode.
 public enum FolderSortMode: Int32 {
     case natural = 0
     case dateModified = 1
@@ -65,23 +65,23 @@ public func folderSortOrder(of entries: [FolderEntry], mode: FolderSortMode,
 }
 
 /// C++ entry point, called from QVImageCore::updateFolderInfo.
-/// An unknown `mode` leaves the order unchanged.
 ///
 /// int64_t imports as Int64 on macOS/Windows but Int on Linux, hence the explicit conversions.
-public func sortFolderEntries(_ entries: QVFolderEntryList, _ mode: Int32,
+public func sortFolderEntries(_ entries: QVFolderEntryList, _ mode: FolderSortMode,
                               _ descending: Bool) -> QVIndexList {
-    let swiftEntries = entries.map {
-        FolderEntry(fileName: String($0.fileName), mimeType: String($0.mimeType),
-                    lastModified: Int64($0.lastModified), lastCreated: Int64($0.lastCreated),
-                    size: Int64($0.size))
+    // forEach rather than map/for-in, which can deep-copy the C++ vector
+    var swiftEntries: [FolderEntry] = []
+    swiftEntries.reserveCapacity(Int(entries.size()))
+    entries.forEach {
+        swiftEntries.append(FolderEntry(
+            fileName: String($0.fileName), mimeType: String($0.mimeType),
+            lastModified: Int64($0.lastModified), lastCreated: Int64($0.lastCreated),
+            size: Int64($0.size)))
     }
-    let order = FolderSortMode(rawValue: mode).map {
-        folderSortOrder(of: swiftEntries, mode: $0, descending: descending)
-    } ?? Array(swiftEntries.indices)
 
     var result = QVIndexList()
-    result.reserve(order.count)
-    for index in order {
+    result.reserve(swiftEntries.count)
+    for index in folderSortOrder(of: swiftEntries, mode: mode, descending: descending) {
         result.push_back(QVIndexList.value_type(index))
     }
     return result

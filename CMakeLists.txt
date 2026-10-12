@@ -51,8 +51,8 @@ if(APPLE)
     set(EXECUTABLE_TYPE MACOSX_BUNDLE)
 endif()
 
-# Enable C++17 (required by Swift/C++ interop)
-set(CMAKE_CXX_STANDARD 17)
+# Enable C++20 (std::span, which Swift bridges to Span/MutableSpan)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable Qt's automatic tools

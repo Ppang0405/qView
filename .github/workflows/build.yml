@@ -23,11 +23,11 @@ jobs:
         include:
           - runner: 'ubuntu-22.04'
             qtVersion: '5.15.2'
-          - runner: 'macos-15'
+          - runner: 'macos-26'
             qtVersion: '6.8.3'
             qtModules: 'qtimageformats'
             buildArch: 'Universal'
-          - runner: 'macos-15'
+          - runner: 'macos-26'
             qtVersion: '5.15.2'
             osSuffix: '_legacy'
             buildArch: 'X64'

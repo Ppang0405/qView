@@ -7,12 +7,13 @@ set(QVCORE_GENERATED_HEADER "${QVCORE_GENERATED_INCLUDE_DIR}/QVCore-Swift.h")
 
 set(QVCORE_SOURCES
     Sources/QVCore/FolderSort.swift
+    Sources/QVCore/IccProfile.swift
 )
 list(TRANSFORM QVCORE_SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
 
 set(QVCORE_SWIFT_FLAGS
     -cxx-interoperability-mode=default
-    -Xcc -std=c++17
+    -Xcc -std=c++20
 )
 
 add_library(QVCore STATIC ${QVCORE_SOURCES})
@@ -24,7 +25,10 @@ set_target_properties(QVCore PROPERTIES
 )
 target_compile_options(QVCore PRIVATE
     "$<$<COMPILE_LANGUAGE:Swift>:-cxx-interoperability-mode=default>"
-    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xcc -std=c++17>"
+    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xcc -std=c++20>"
+    # Unsafe code (raw pointers, unsafe C++ types) must be marked `unsafe`; enforce it
+    "$<$<COMPILE_LANGUAGE:Swift>:-strict-memory-safety>"
+    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Werror StrictMemorySafety>"
 )
 target_include_directories(QVCore PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"

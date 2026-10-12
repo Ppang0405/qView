@@ -5,6 +5,7 @@
 // Keep this header free of Qt so it can be imported into Swift and built standalone.
 
 #include <cstdint>
+#include <span>
 #include <string>
 #include <vector>
 
@@ -20,10 +21,16 @@ struct QVFolderEntry
 using QVFolderEntryList = std::vector<QVFolderEntry>;
 using QVIndexList = std::vector<int64_t>;
 
+// A mutable view of bytes owned by the caller (e.g. a QByteArray). Swift accesses it as a
+// bounds-checked MutableSpan without copying.
+using QVMutableBytes = std::span<uint8_t>;
+
+// Bridge functions are noexcept: a C++ exception propagating into Swift terminates the program.
+
 // Locale-aware comparison of two UTF-8 strings, returning <0, 0 or >0. With `numeric`,
 // digit runs compare by value ("img2" < "img10"). The app implements this with QCollator
 // (src/qvcorebridge.cpp) so Swift doesn't need Foundation's bundled ICU on Linux/Windows;
 // standalone SwiftPM builds use a simpler fallback (Sources/QVBridge/standalone.cpp).
-int qvCompareStrings(const std::string &a, const std::string &b, bool numeric);
+int qvCompareStrings(const std::string &a, const std::string &b, bool numeric) noexcept;
 
 #endif // QVBRIDGE_H

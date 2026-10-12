@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.2
 // Standalone package for building and testing the Swift core without Qt.
 // The app itself compiles these same sources through CMake.
 
@@ -11,7 +11,12 @@ let package = Package(
         .target(
             name: "QVCore",
             dependencies: ["QVBridge"],
-            swiftSettings: [.interoperabilityMode(.Cxx)]
+            swiftSettings: [
+                .interoperabilityMode(.Cxx),
+                // Unsafe code (raw pointers, unsafe C++ types) must be marked `unsafe`
+                .strictMemorySafety(),
+                .treatWarning("StrictMemorySafety", as: .error),
+            ]
         ),
         .testTarget(
             name: "QVCoreTests",
@@ -19,5 +24,5 @@ let package = Package(
             swiftSettings: [.interoperabilityMode(.Cxx)]
         ),
     ],
-    cxxLanguageStandard: .cxx17
+    cxxLanguageStandard: .cxx20
 )

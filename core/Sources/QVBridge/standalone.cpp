@@ -6,7 +6,7 @@
 #include <cctype>
 
 // Not locale-aware: compares ASCII case-insensitively and digit runs by value.
-int qvCompareStrings(const std::string &a, const std::string &b, bool numeric)
+int qvCompareStrings(const std::string &a, const std::string &b, bool numeric) noexcept
 {
     size_t i = 0, j = 0;
     while (i < a.size() && j < b.size()) {
