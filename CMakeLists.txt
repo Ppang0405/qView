@@ -1,7 +1,39 @@
 cmake_minimum_required(VERSION 3.26)
 
+project(qView VERSION 7.0 LANGUAGES CXX)
+
+# CMake doesn't pass the macOS architecture or deployment target to the Swift compiler,
+# so derive its target triple from them. Swift builds one architecture at a time; for a
+# universal app, build each architecture separately and merge them with lipo.
+if(APPLE AND NOT CMAKE_Swift_COMPILER_TARGET
+   AND (CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_DEPLOYMENT_TARGET))
+    if(CMAKE_OSX_ARCHITECTURES)
+        list(LENGTH CMAKE_OSX_ARCHITECTURES QV_ARCH_COUNT)
+        if(QV_ARCH_COUNT GREATER 1)
+            message(FATAL_ERROR "Swift supports one architecture per build; "
+                                "build each of ${CMAKE_OSX_ARCHITECTURES} separately")
+        endif()
+        set(QV_SWIFT_ARCH ${CMAKE_OSX_ARCHITECTURES})
+    else()
+        set(QV_SWIFT_ARCH ${CMAKE_HOST_SYSTEM_PROCESSOR})
+    endif()
+    if(CMAKE_OSX_DEPLOYMENT_TARGET)
+        set(QV_SWIFT_OS_VERSION ${CMAKE_OSX_DEPLOYMENT_TARGET})
+    else()
+        # Same default as the C++ compiler: the running macOS version
+        execute_process(COMMAND sw_vers -productVersion
+                        OUTPUT_VARIABLE QV_SWIFT_OS_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif()
+    set(CMAKE_Swift_COMPILER_TARGET "${QV_SWIFT_ARCH}-apple-macosx${QV_SWIFT_OS_VERSION}")
+endif()
+# CMake 4 no longer sets a default SDK, and swiftc can't find its standard library without one
+if(APPLE AND NOT CMAKE_OSX_SYSROOT)
+    execute_process(COMMAND xcrun --sdk macosx --show-sdk-path
+                    OUTPUT_VARIABLE CMAKE_OSX_SYSROOT OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+
 # Swift requires the Ninja (or Xcode) generator: cmake -B build -G Ninja
-project(qView VERSION 7.0 LANGUAGES CXX Swift)
+enable_language(Swift)
 
 # Optional test building
 option(BUILD_TESTS "Build tests" OFF)
@@ -60,6 +92,7 @@ set(PROJECT_SOURCES
     src/qvwelcomedialog.cpp
     src/qvinfodialog.cpp
     src/qvimagecore.cpp
+    src/qvcorebridge.cpp
     src/qvshortcutdialog.cpp
     src/actionmanager.cpp
     src/settingsmanager.cpp
@@ -150,6 +183,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT
 # Set the executable name to lowercase on Linux
 if(UNIX AND NOT APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "qview")
+    # Linux distributions don't ship the Swift runtime, so link it into the executable.
+    # The C++ interop libraries (swiftCxx) are only in the regular runtime directory.
+    execute_process(COMMAND "${CMAKE_Swift_COMPILER}" -print-target-info
+                    OUTPUT_VARIABLE QV_SWIFT_TARGET_INFO)
+    string(JSON QV_SWIFT_RUNTIME_DIR GET "${QV_SWIFT_TARGET_INFO}" paths runtimeLibraryPaths 0)
+    target_link_options(${PROJECT_NAME} PRIVATE -static-stdlib "-L${QV_SWIFT_RUNTIME_DIR}")
 endif()
 
 # Add compile definitions based on options

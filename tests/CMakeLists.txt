@@ -17,6 +17,7 @@ set(TEST_SOURCES
     ../src/qvwelcomedialog.cpp
     ../src/qvinfodialog.cpp
     ../src/qvimagecore.cpp
+    ../src/qvcorebridge.cpp
     ../src/qvshortcutdialog.cpp
     ../src/actionmanager.cpp
     ../src/settingsmanager.cpp

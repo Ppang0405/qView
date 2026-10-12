@@ -14,6 +14,7 @@ public:
 private slots:
     void testClonedActionsUntracked();
     void testFolderNaturalSort();
+    void testFolderSortIsLocaleAware();
 };
 
 ActionManagerTests::ActionManagerTests() { }
@@ -45,7 +46,9 @@ void ActionManagerTests::testClonedActionsUntracked()
 
 void ActionManagerTests::testFolderNaturalSort()
 {
-    // Sorting runs in the Swift core; check it end to end through QVImageCore
+    // Sorting runs in the Swift core; check it end to end through QVImageCore.
+    // Collation in the C locale is plain byte order, so pin a real locale.
+    QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates));
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
     for (const QString &name : { "img10.png", "img2.png", "img1.png" }) {
@@ -60,6 +63,26 @@ void ActionManagerTests::testFolderNaturalSort()
     for (const auto &file : imageCore.getCurrentFileDetails().folderFileInfoList)
         names.append(file.fileName);
     QCOMPARE(names, QStringList({ "img1.png", "img2.png", "img10.png" }));
+}
+
+void ActionManagerTests::testFolderSortIsLocaleAware()
+{
+    // Accented names must sort with their base letter, as QCollator does
+    QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates));
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    for (const QString &name : QStringList({ "zebra.png", QString::fromUtf8("éclair.png"), "apple.png" })) {
+        QFile file(dir.filePath(name));
+        QVERIFY(file.open(QIODevice::WriteOnly));
+    }
+
+    QVImageCore imageCore;
+    imageCore.updateFolderInfo(dir.path());
+
+    QStringList names;
+    for (const auto &file : imageCore.getCurrentFileDetails().folderFileInfoList)
+        names.append(file.fileName);
+    QCOMPARE(names, QStringList({ "apple.png", QString::fromUtf8("éclair.png"), "zebra.png" }));
 }
 
 int main(int argc, char *argv[])

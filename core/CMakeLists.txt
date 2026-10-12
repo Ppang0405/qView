@@ -35,15 +35,18 @@ target_include_directories(QVCore PUBLIC
 # Generate the C++ header (QVCore-Swift.h) that exposes the Swift API to C++.
 # This runs as a separate type-check so C++ sources can include the header before
 # the Swift library itself has finished building.
+if(CMAKE_Swift_COMPILER_TARGET)
+    list(APPEND QVCORE_TARGET_FLAGS -target "${CMAKE_Swift_COMPILER_TARGET}")
+endif()
 if(APPLE AND CMAKE_OSX_SYSROOT)
-    set(QVCORE_SDK_FLAGS -sdk "${CMAKE_OSX_SYSROOT}")
+    list(APPEND QVCORE_TARGET_FLAGS -sdk "${CMAKE_OSX_SYSROOT}")
 endif()
 add_custom_command(
     OUTPUT "${QVCORE_GENERATED_HEADER}"
     COMMAND "${CMAKE_Swift_COMPILER}" -typecheck
             -module-name QVCore
             ${QVCORE_SWIFT_FLAGS}
-            ${QVCORE_SDK_FLAGS}
+            ${QVCORE_TARGET_FLAGS}
             -I "${QVCORE_BRIDGE_INCLUDE_DIR}"
             -emit-clang-header-path "${QVCORE_GENERATED_HEADER}"
             ${QVCORE_SOURCES}

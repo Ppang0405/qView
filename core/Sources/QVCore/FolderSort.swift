@@ -1,5 +1,4 @@
 import CxxStdlib
-import Foundation
 import QVBridge
 
 /// Values of the "sortmode" setting.
@@ -41,10 +40,17 @@ public func folderSortOrder(of entries: [FolderEntry], mode: FolderSortMode,
         indices.sorted { areInIncreasingOrder(entries[$0], entries[$1]) }
     }
 
-    let wantedOrder: ComparisonResult = descending ? .orderedDescending : .orderedAscending
+    // Text comparison goes through the C++ bridge (QCollator in the app)
+    func textOrder(_ keys: [std.string], numeric: Bool) -> [Int] {
+        indices.sorted {
+            let result = qvCompareStrings(keys[$0], keys[$1], numeric)
+            return descending ? result > 0 : result < 0
+        }
+    }
+
     switch mode {
     case .natural:
-        return sorted { $0.fileName.localizedStandardCompare($1.fileName) == wantedOrder }
+        return textOrder(entries.map { std.string($0.fileName) }, numeric: true)
     case .dateModified:
         return sorted { descending ? $0.lastModified < $1.lastModified : $0.lastModified > $1.lastModified }
     case .dateCreated:
@@ -52,7 +58,7 @@ public func folderSortOrder(of entries: [FolderEntry], mode: FolderSortMode,
     case .size:
         return sorted { descending ? $0.size < $1.size : $0.size > $1.size }
     case .type:
-        return sorted { $0.mimeType.localizedCompare($1.mimeType) == wantedOrder }
+        return textOrder(entries.map { std.string($0.mimeType) }, numeric: false)
     case .random:
         return indices.shuffled()
     }
