@@ -79,6 +79,16 @@ else()
     find_package(Qt5 QUIET COMPONENTS LinguistTools)
 endif()
 
+# Qt builds with reduce_relocations add -fPIC to Qt Core's interface compile options for every
+# language. Those also reach the final link, which swiftc performs and which rejects -fPIC.
+# Qt 6.9+ excludes Swift itself; do the same for Qt 5 and older Qt 6.
+get_target_property(QV_QT_CORE_OPTIONS Qt${QT_VERSION_MAJOR}::Core INTERFACE_COMPILE_OPTIONS)
+if(QV_QT_CORE_OPTIONS)
+    list(TRANSFORM QV_QT_CORE_OPTIONS REPLACE "^-fPIC$" "$<$<NOT:$<COMPILE_LANGUAGE:Swift>>:-fPIC>")
+    set_target_properties(Qt${QT_VERSION_MAJOR}::Core PROPERTIES
+                          INTERFACE_COMPILE_OPTIONS "${QV_QT_CORE_OPTIONS}")
+endif()
+
 # Source files
 set(PROJECT_SOURCES
     src/main.cpp

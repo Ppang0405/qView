@@ -29,7 +29,14 @@ target_compile_options(QVCore PRIVATE
 target_include_directories(QVCore PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${QVCORE_BRIDGE_INCLUDE_DIR}"
+)
+# The generated header includes <swiftToCxx/...> from the Swift toolchain, which only the
+# toolchain's own Clang finds by default; add it so other tools (e.g. clang-tidy) can too.
+# Both are SYSTEM includes so tools don't lint generated code.
+cmake_path(GET CMAKE_Swift_COMPILER PARENT_PATH QVCORE_SWIFT_BIN_DIR)
+target_include_directories(QVCore SYSTEM PUBLIC
     "${QVCORE_GENERATED_INCLUDE_DIR}"
+    "${QVCORE_SWIFT_BIN_DIR}/../lib/swift"
 )
 
 # Linux and Windows don't ship the Swift runtime, so link it into every executable that uses
