@@ -45,9 +45,9 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set the application type for platform-specific executables
-if(WIN32)
-    set(EXECUTABLE_TYPE WIN32)
-elseif(APPLE)
+# (On Windows, the GUI subsystem is set with link options below: swiftc links the app, and
+# CMake doesn't support WIN32_EXECUTABLE for Swift-linked executables.)
+if(APPLE)
     set(EXECUTABLE_TYPE MACOSX_BUNDLE)
 endif()
 
@@ -79,15 +79,38 @@ else()
     find_package(Qt5 QUIET COMPONENTS LinguistTools)
 endif()
 
-# Qt builds with reduce_relocations add -fPIC to Qt Core's interface compile options for every
-# language. Those also reach the final link, which swiftc performs and which rejects -fPIC.
-# Qt 6.9+ excludes Swift itself; do the same for Qt 5 and older Qt 6.
-get_target_property(QV_QT_CORE_OPTIONS Qt${QT_VERSION_MAJOR}::Core INTERFACE_COMPILE_OPTIONS)
-if(QV_QT_CORE_OPTIONS)
-    list(TRANSFORM QV_QT_CORE_OPTIONS REPLACE "^-fPIC$" "$<$<NOT:$<COMPILE_LANGUAGE:Swift>>:-fPIC>")
-    set_target_properties(Qt${QT_VERSION_MAJOR}::Core PROPERTIES
-                          INTERFACE_COMPILE_OPTIONS "${QV_QT_CORE_OPTIONS}")
-endif()
+# Qt builds with reduce_relocations add -fPIC to the interface compile options of Qt modules for
+# every language. Those also reach the final link, which swiftc performs and which rejects -fPIC.
+# Qt 6.9+ excludes Swift itself; do the same for Qt 5 and older Qt 6, following each target's
+# Qt dependencies.
+function(qv_exclude_swift_from_qt_fpic)
+    set(pending ${ARGN})
+    set(visited)
+    while(pending)
+        list(POP_FRONT pending target)
+        if(target IN_LIST visited OR NOT TARGET ${target})
+            continue()
+        endif()
+        list(APPEND visited ${target})
+        get_target_property(aliased ${target} ALIASED_TARGET)
+        if(aliased)
+            list(APPEND pending ${aliased})
+            continue()
+        endif()
+        get_target_property(options ${target} INTERFACE_COMPILE_OPTIONS)
+        if(options)
+            list(TRANSFORM options REPLACE "^-fPIC$" "$<$<NOT:$<COMPILE_LANGUAGE:Swift>>:-fPIC>")
+            set_target_properties(${target} PROPERTIES INTERFACE_COMPILE_OPTIONS "${options}")
+        endif()
+        get_target_property(deps ${target} INTERFACE_LINK_LIBRARIES)
+        if(deps)
+            string(REGEX MATCHALL "Qt[0-9]*::[A-Za-z0-9_]+" deps "${deps}")
+            list(APPEND pending ${deps})
+        endif()
+    endwhile()
+endfunction()
+qv_exclude_swift_from_qt_fpic(Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network
+                              Qt${QT_VERSION_MAJOR}::Svg)
 
 # Source files
 set(PROJECT_SOURCES
@@ -182,6 +205,11 @@ if(WIN32)
     list(APPEND PROJECT_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/qView.rc")
 endif()
 add_executable(${PROJECT_NAME} ${EXECUTABLE_TYPE} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PROJECT_FORMS} ${PROJECT_RESOURCES})
+if(WIN32)
+    # GUI app without a console window, entered through the standard main()
+    target_link_options(${PROJECT_NAME} PRIVATE
+        "SHELL:-Xlinker /SUBSYSTEM:WINDOWS" "SHELL:-Xlinker /ENTRY:mainCRTStartup")
+endif()
 
 # Swift core library
 add_subdirectory(core)

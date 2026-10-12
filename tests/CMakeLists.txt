@@ -3,6 +3,7 @@
 
 # Find Qt Test component and other dependencies
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network Widgets Svg Test REQUIRED)
+qv_exclude_swift_from_qt_fpic(Qt${QT_VERSION_MAJOR}::Test)
 
 # Get the same source files as the main project
 set(TEST_SOURCES
