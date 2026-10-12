@@ -118,6 +118,17 @@ endfunction()
 qv_exclude_swift_from_qt_fpic(Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network
                               Qt${QT_VERSION_MAJOR}::Svg)
 
+# Qt 6.8 links the AGL framework, which the macOS 26 SDK no longer has (Qt 6.9+ doesn't link it).
+# qView doesn't use AGL, so drop it.
+if(APPLE AND TARGET WrapOpenGL::WrapOpenGL)
+    get_target_property(QV_OPENGL_LIBS WrapOpenGL::WrapOpenGL INTERFACE_LINK_LIBRARIES)
+    if(QV_OPENGL_LIBS)
+        list(FILTER QV_OPENGL_LIBS EXCLUDE REGEX "(^-framework AGL$|/AGL\\.framework)")
+        set_target_properties(WrapOpenGL::WrapOpenGL PROPERTIES
+                              INTERFACE_LINK_LIBRARIES "${QV_OPENGL_LIBS}")
+    endif()
+endif()
+
 # Source files
 set(PROJECT_SOURCES
     src/main.cpp
