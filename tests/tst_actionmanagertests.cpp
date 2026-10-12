@@ -1,6 +1,7 @@
 #include <QtTest>
 
 #include "qvapplication.h"
+#include "qvimagecore.h"
 
 class ActionManagerTests : public QObject
 {
@@ -12,6 +13,7 @@ public:
 
 private slots:
     void testClonedActionsUntracked();
+    void testFolderNaturalSort();
 };
 
 ActionManagerTests::ActionManagerTests() { }
@@ -39,6 +41,25 @@ void ActionManagerTests::testClonedActionsUntracked()
     QCOMPARE(qvApp->getActionManager().getAllInstancesOfAction("fullscreen").length(),
              fullscreenCount);
     QCOMPARE(qvApp->getActionManager().getAllInstancesOfAction("open").length(), openCount);
+}
+
+void ActionManagerTests::testFolderNaturalSort()
+{
+    // Sorting runs in the Swift core; check it end to end through QVImageCore
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    for (const QString &name : { "img10.png", "img2.png", "img1.png" }) {
+        QFile file(dir.filePath(name));
+        QVERIFY(file.open(QIODevice::WriteOnly));
+    }
+
+    QVImageCore imageCore;
+    imageCore.updateFolderInfo(dir.path());
+
+    QStringList names;
+    for (const auto &file : imageCore.getCurrentFileDetails().folderFileInfoList)
+        names.append(file.fileName);
+    QCOMPARE(names, QStringList({ "img1.png", "img2.png", "img10.png" }));
 }
 
 int main(int argc, char *argv[])

@@ -52,7 +52,7 @@ fi
 echo "Configuring with: cmake -B build -G Ninja $CMAKE_ARGS"
 
 # Run CMake configuration.
-cmake -B build $CMAKE_ARGS
+cmake -B build -G Ninja $CMAKE_ARGS
 
 # Run the build
 echo "Building project..."

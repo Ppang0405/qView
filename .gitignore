@@ -49,3 +49,7 @@ build/*
 
 *.qm
 .qm
+
+# SwiftPM
+core/.build/
+core/.swiftpm/

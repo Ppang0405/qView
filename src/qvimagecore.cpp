@@ -3,13 +3,12 @@
 #include "qvwin32functions.h"
 #include "qvcocoafunctions.h"
 #include "qvlinuxx11functions.h"
+#include "qvcore.h"
 #include <cstring>
-#include <random>
 #include <QMessageBox>
 #include <QDir>
 #include <QUrl>
 #include <QSettings>
-#include <QCollator>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QIcon>
 #include <QGuiApplication>
@@ -340,84 +339,26 @@ void QVImageCore::updateFolderInfo(QString dirPath)
     const bool shouldSort = lastDirInfo != dirInfo;
     lastDirInfo = dirInfo;
 
-    const auto sortFn = [&]() {
-        // Sorting
-        switch (dirInfo.sortMode) {
-        case 0: {
-            // Natural sorting
-            QCollator collator;
-            collator.setNumericMode(true);
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return collator.compare(file1.fileName, file2.fileName) > 0;
-                          else
-                              return collator.compare(file1.fileName, file2.fileName) < 0;
-                      });
-            break;
-        }
-        case 1:
-            // Date modified
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return file1.lastModified < file2.lastModified;
-                          else
-                              return file1.lastModified > file2.lastModified;
-                      });
-            break;
-        case 2:
-            // Date created
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return file1.lastCreated < file2.lastCreated;
-                          else
-                              return file1.lastCreated > file2.lastCreated;
-                      });
-            break;
-        case 3:
-            // Size
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return file1.size < file2.size;
-                          else
-                              return file1.size > file2.size;
-                      });
-            break;
-        case 4: {
-            // Type
-            QCollator collator;
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return collator.compare(file1.mimeType, file2.mimeType) > 0;
-                          else
-                              return collator.compare(file1.mimeType, file2.mimeType) < 0;
-                      });
-            break;
-        }
-        case 5:
-            // Random
-            std::shuffle(currentFileDetails.folderFileInfoList.begin(),
-                         currentFileDetails.folderFileInfoList.end(),
-                         std::default_random_engine(
-                                 std::chrono::system_clock::now().time_since_epoch().count()));
-            break;
-        default:
-            Q_ASSERT(false);
-            break;
-        }
-    };
-
     if (shouldSort) {
-        sortFn();
+        // Sorting is implemented in Swift (core/Sources/QVCore/FolderSort.swift)
+        auto &fileList = currentFileDetails.folderFileInfoList;
+        Q_ASSERT(dirInfo.sortMode >= 0 && dirInfo.sortMode <= 5);
+
+        QVFolderEntryList entries;
+        entries.reserve(fileList.size());
+        for (const CompatibleFile &file : std::as_const(fileList)) {
+            entries.push_back({ file.fileName.toStdString(), file.mimeType.toStdString(),
+                                file.lastModified, file.lastCreated, file.size });
+        }
+
+        const QVIndexList order =
+                QVCore::sortFolderEntries(entries, dirInfo.sortMode, dirInfo.sortDescending);
+
+        QList<CompatibleFile> sortedList;
+        sortedList.reserve(fileList.size());
+        for (const int64_t index : order)
+            sortedList.append(fileList.at(index));
+        fileList = sortedList;
     }
 
     // Set current file index variable

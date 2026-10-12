@@ -61,7 +61,9 @@ target_link_libraries(actionmanagertests PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets 
     Qt${QT_VERSION_MAJOR}::Svg 
     Qt${QT_VERSION_MAJOR}::Test
+    QVCore
 )
+add_dependencies(actionmanagertests QVCoreHeader)
 
 # Platform-specific libraries
 if(WIN32 AND NOT NO_WIN32)

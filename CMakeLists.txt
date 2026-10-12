@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.26)
 
-project(qView VERSION 7.0 LANGUAGES CXX)
+# Swift requires the Ninja (or Xcode) generator: cmake -B build -G Ninja
+project(qView VERSION 7.0 LANGUAGES CXX Swift)
 
 # Optional test building
 option(BUILD_TESTS "Build tests" OFF)
@@ -18,8 +19,8 @@ elseif(APPLE)
     set(EXECUTABLE_TYPE MACOSX_BUNDLE)
 endif()
 
-# Enable C++14
-set(CMAKE_CXX_STANDARD 14)
+# Enable C++17 (required by Swift/C++ interop)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable Qt's automatic tools
@@ -138,6 +139,11 @@ if(WIN32)
     list(APPEND PROJECT_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/qView.rc")
 endif()
 add_executable(${PROJECT_NAME} ${EXECUTABLE_TYPE} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PROJECT_FORMS} ${PROJECT_RESOURCES})
+
+# Swift core library
+add_subdirectory(core)
+target_link_libraries(${PROJECT_NAME} PRIVATE QVCore)
+add_dependencies(${PROJECT_NAME} QVCoreHeader)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Svg)
 
