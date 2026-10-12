@@ -32,6 +32,20 @@ target_include_directories(QVCore PUBLIC
     "${QVCORE_GENERATED_INCLUDE_DIR}"
 )
 
+# Linux and Windows don't ship the Swift runtime, so link it into every executable that uses
+# QVCore. (macOS includes it in the OS.) On Windows, Swift code must also be compiled for
+# static linking.
+if(WIN32)
+    target_compile_options(QVCore PRIVATE "$<$<COMPILE_LANGUAGE:Swift>:-static-stdlib>")
+    target_link_options(QVCore INTERFACE -static-stdlib)
+elseif(UNIX AND NOT APPLE)
+    # The C++ interop libraries (swiftCxx) are only in the regular runtime directory
+    execute_process(COMMAND "${CMAKE_Swift_COMPILER}" -print-target-info
+                    OUTPUT_VARIABLE QVCORE_TARGET_INFO)
+    string(JSON QVCORE_RUNTIME_DIR GET "${QVCORE_TARGET_INFO}" paths runtimeLibraryPaths 0)
+    target_link_options(QVCore INTERFACE -static-stdlib "-L${QVCORE_RUNTIME_DIR}")
+endif()
+
 # Generate the C++ header (QVCore-Swift.h) that exposes the Swift API to C++.
 # This runs as a separate type-check so C++ sources can include the header before
 # the Swift library itself has finished building.

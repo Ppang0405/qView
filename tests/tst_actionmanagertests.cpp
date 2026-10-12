@@ -71,7 +71,8 @@ void ActionManagerTests::testFolderSortIsLocaleAware()
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates));
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
-    for (const QString &name : QStringList({ "zebra.png", QString::fromUtf8("éclair.png"), "apple.png" })) {
+    for (const QString &name :
+         QStringList({ "zebra.png", QString::fromUtf8("éclair.png"), "apple.png" })) {
         QFile file(dir.filePath(name));
         QVERIFY(file.open(QIODevice::WriteOnly));
     }

@@ -183,12 +183,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT
 # Set the executable name to lowercase on Linux
 if(UNIX AND NOT APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "qview")
-    # Linux distributions don't ship the Swift runtime, so link it into the executable.
-    # The C++ interop libraries (swiftCxx) are only in the regular runtime directory.
-    execute_process(COMMAND "${CMAKE_Swift_COMPILER}" -print-target-info
-                    OUTPUT_VARIABLE QV_SWIFT_TARGET_INFO)
-    string(JSON QV_SWIFT_RUNTIME_DIR GET "${QV_SWIFT_TARGET_INFO}" paths runtimeLibraryPaths 0)
-    target_link_options(${PROJECT_NAME} PRIVATE -static-stdlib "-L${QV_SWIFT_RUNTIME_DIR}")
 endif()
 
 # Add compile definitions based on options

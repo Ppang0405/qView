@@ -21,11 +21,11 @@ jobs:
         include:
           - runner: 'ubuntu-22.04'
             qtVersion: '5.15.2'
-          - runner: 'macos-14'
+          - runner: 'macos-15'
             qtVersion: '6.8.3'
             qtModules: 'qtimageformats'
             buildArch: 'Universal'
-          - runner: 'macos-14'
+          - runner: 'macos-15'
             qtVersion: '5.15.2'
             osSuffix: '_legacy'
             buildArch: 'X64'
@@ -45,7 +45,10 @@ jobs:
             qtArch: 'win32_msvc2019'
             osSuffix: '_32'
             buildArch: 'X86'
+            # Official Swift releases may not include the 32-bit Windows SDK
+            experimental: true
     runs-on: ${{ matrix.runner }}
+    continue-on-error: ${{ matrix.experimental == true }}
     steps:
       - name: Set environment variables
         shell: bash
@@ -68,6 +71,13 @@ jobs:
           arch: ${{ matrix.qtArch }}
           cache: true
           modules: ${{ matrix.qtModules }}
+
+      - name: Install Swift (Windows)
+        if: runner.os == 'Windows'
+        uses: compnerd/gha-setup-swift@v0.5.0
+        with:
+          swift-version: swift-6.4.0-release
+          swift-build: 6.4.0-RELEASE
 
       - name: Build qView
         shell: pwsh

@@ -18,14 +18,21 @@ jobs:
           cache: true
           modules: 'qtimageformats'
 
+      - name: Use the Swift toolchain's Clang
+        # Swift's generated C++ header must be compiled by Clang
+        run: echo "CXX=$(dirname "$(readlink -f "$(which swiftc)")")/clang++" >> "$GITHUB_ENV"
+
       - name: Configure CMake
-        run: cmake -B build -DBUILD_TESTS=ON
+        run: cmake -B build -G Ninja -DBUILD_TESTS=ON
 
       - name: Build
         run: cmake --build build --parallel
 
       - name: Run tests
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" ctest --test-dir build
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" ctest --test-dir build --output-on-failure
+
+      - name: Run Swift core tests
+        run: swift test --package-path core
 
   clang-tidy:
     name: Run clang-tidy
@@ -43,24 +50,28 @@ jobs:
       - name: Install clang-tidy
         run: sudo apt-get update && sudo apt-get install -y clang-tidy
 
+      - name: Use the Swift toolchain's Clang
+        # Swift's generated C++ header must be compiled by Clang
+        run: echo "CXX=$(dirname "$(readlink -f "$(which swiftc)")")/clang++" >> "$GITHUB_ENV"
+
       - name: Run clang-tidy
         run: ./build.sh --tidy
 
-    format:
-      name: Run clang-format
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
+  format:
+    name: Run clang-format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Install Qt
-          uses: jurplel/install-qt-action@v4
-          with:
-            version: '6.8'
-            cache: true
-            modules: 'qtimageformats'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8'
+          cache: true
+          modules: 'qtimageformats'
 
-        - name: Install clang-format
-          run: sudo apt-get update && sudo apt-get install -y clang-format
+      - name: Install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
 
-        - name: Run clang-format
-          run: ./build.sh --format-check
+      - name: Run clang-format
+        run: ./build.sh --format-check
