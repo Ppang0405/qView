@@ -1,0 +1,5 @@
+module QVBridge {
+    header "qvbridge.h"
+    requires cplusplus
+    export *
+}

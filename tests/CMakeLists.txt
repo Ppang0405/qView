@@ -3,6 +3,7 @@
 
 # Find Qt Test component and other dependencies
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network Widgets Svg Test REQUIRED)
+qv_exclude_swift_from_qt_fpic(Qt${QT_VERSION_MAJOR}::Test)
 
 # Get the same source files as the main project
 set(TEST_SOURCES
@@ -17,6 +18,7 @@ set(TEST_SOURCES
     ../src/qvwelcomedialog.cpp
     ../src/qvinfodialog.cpp
     ../src/qvimagecore.cpp
+    ../src/qvcorebridge.cpp
     ../src/qvshortcutdialog.cpp
     ../src/actionmanager.cpp
     ../src/settingsmanager.cpp
@@ -61,7 +63,9 @@ target_link_libraries(actionmanagertests PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets 
     Qt${QT_VERSION_MAJOR}::Svg 
     Qt${QT_VERSION_MAJOR}::Test
+    QVCore
 )
+add_dependencies(actionmanagertests QVCoreHeader)
 
 # Platform-specific libraries
 if(WIN32 AND NOT NO_WIN32)

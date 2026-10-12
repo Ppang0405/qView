@@ -1,6 +1,45 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.26)
 
 project(qView VERSION 7.0 LANGUAGES CXX)
+
+# macOS includes the Swift runtime only from 10.14.4 (the app doesn't bundle one)
+if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET AND CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.14.4)
+    message(STATUS "Raising the macOS deployment target to 10.14.4 for the Swift runtime")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14.4 CACHE STRING "Minimum macOS version" FORCE)
+endif()
+
+# CMake doesn't pass the macOS architecture or deployment target to the Swift compiler,
+# so derive its target triple from them. Swift builds one architecture at a time; for a
+# universal app, build each architecture separately and merge them with lipo.
+if(APPLE AND NOT CMAKE_Swift_COMPILER_TARGET
+   AND (CMAKE_OSX_ARCHITECTURES OR CMAKE_OSX_DEPLOYMENT_TARGET))
+    if(CMAKE_OSX_ARCHITECTURES)
+        list(LENGTH CMAKE_OSX_ARCHITECTURES QV_ARCH_COUNT)
+        if(QV_ARCH_COUNT GREATER 1)
+            message(FATAL_ERROR "Swift supports one architecture per build; "
+                                "build each of ${CMAKE_OSX_ARCHITECTURES} separately")
+        endif()
+        set(QV_SWIFT_ARCH ${CMAKE_OSX_ARCHITECTURES})
+    else()
+        set(QV_SWIFT_ARCH ${CMAKE_HOST_SYSTEM_PROCESSOR})
+    endif()
+    if(CMAKE_OSX_DEPLOYMENT_TARGET)
+        set(QV_SWIFT_OS_VERSION ${CMAKE_OSX_DEPLOYMENT_TARGET})
+    else()
+        # Same default as the C++ compiler: the running macOS version
+        execute_process(COMMAND sw_vers -productVersion
+                        OUTPUT_VARIABLE QV_SWIFT_OS_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif()
+    set(CMAKE_Swift_COMPILER_TARGET "${QV_SWIFT_ARCH}-apple-macosx${QV_SWIFT_OS_VERSION}")
+endif()
+# CMake 4 no longer sets a default SDK, and swiftc can't find its standard library without one
+if(APPLE AND NOT CMAKE_OSX_SYSROOT)
+    execute_process(COMMAND xcrun --sdk macosx --show-sdk-path
+                    OUTPUT_VARIABLE CMAKE_OSX_SYSROOT OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+
+# Swift requires the Ninja (or Xcode) generator: cmake -B build -G Ninja
+enable_language(Swift)
 
 # Optional test building
 option(BUILD_TESTS "Build tests" OFF)
@@ -12,14 +51,14 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set the application type for platform-specific executables
-if(WIN32)
-    set(EXECUTABLE_TYPE WIN32)
-elseif(APPLE)
+# (On Windows, the GUI subsystem is set with link options below: swiftc links the app, and
+# CMake doesn't support WIN32_EXECUTABLE for Swift-linked executables.)
+if(APPLE)
     set(EXECUTABLE_TYPE MACOSX_BUNDLE)
 endif()
 
-# Enable C++14
-set(CMAKE_CXX_STANDARD 14)
+# Enable C++20 (std::span, which Swift bridges to Span/MutableSpan)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable Qt's automatic tools
@@ -46,6 +85,50 @@ else()
     find_package(Qt5 QUIET COMPONENTS LinguistTools)
 endif()
 
+# Qt builds with reduce_relocations add -fPIC to the interface compile options of Qt modules for
+# every language. Those also reach the final link, which swiftc performs and which rejects -fPIC.
+# Qt 6.9+ excludes Swift itself; do the same for Qt 5 and older Qt 6, following each target's
+# Qt dependencies.
+function(qv_exclude_swift_from_qt_fpic)
+    set(pending ${ARGN})
+    set(visited)
+    while(pending)
+        list(POP_FRONT pending target)
+        if(target IN_LIST visited OR NOT TARGET ${target})
+            continue()
+        endif()
+        list(APPEND visited ${target})
+        get_target_property(aliased ${target} ALIASED_TARGET)
+        if(aliased)
+            list(APPEND pending ${aliased})
+            continue()
+        endif()
+        get_target_property(options ${target} INTERFACE_COMPILE_OPTIONS)
+        if(options)
+            list(TRANSFORM options REPLACE "^-fPIC$" "$<$<NOT:$<COMPILE_LANGUAGE:Swift>>:-fPIC>")
+            set_target_properties(${target} PROPERTIES INTERFACE_COMPILE_OPTIONS "${options}")
+        endif()
+        get_target_property(deps ${target} INTERFACE_LINK_LIBRARIES)
+        if(deps)
+            string(REGEX MATCHALL "Qt[0-9]*::[A-Za-z0-9_]+" deps "${deps}")
+            list(APPEND pending ${deps})
+        endif()
+    endwhile()
+endfunction()
+qv_exclude_swift_from_qt_fpic(Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network
+                              Qt${QT_VERSION_MAJOR}::Svg)
+
+# Qt 6.8 links the AGL framework, which the macOS 26 SDK no longer has (Qt 6.9+ doesn't link it).
+# qView doesn't use AGL, so drop it.
+if(APPLE AND TARGET WrapOpenGL::WrapOpenGL)
+    get_target_property(QV_OPENGL_LIBS WrapOpenGL::WrapOpenGL INTERFACE_LINK_LIBRARIES)
+    if(QV_OPENGL_LIBS)
+        list(FILTER QV_OPENGL_LIBS EXCLUDE REGEX "(^-framework AGL$|/AGL\\.framework)")
+        set_target_properties(WrapOpenGL::WrapOpenGL PROPERTIES
+                              INTERFACE_LINK_LIBRARIES "${QV_OPENGL_LIBS}")
+    endif()
+endif()
+
 # Source files
 set(PROJECT_SOURCES
     src/main.cpp
@@ -59,6 +142,7 @@ set(PROJECT_SOURCES
     src/qvwelcomedialog.cpp
     src/qvinfodialog.cpp
     src/qvimagecore.cpp
+    src/qvcorebridge.cpp
     src/qvshortcutdialog.cpp
     src/actionmanager.cpp
     src/settingsmanager.cpp
@@ -138,6 +222,16 @@ if(WIN32)
     list(APPEND PROJECT_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/qView.rc")
 endif()
 add_executable(${PROJECT_NAME} ${EXECUTABLE_TYPE} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PROJECT_FORMS} ${PROJECT_RESOURCES})
+if(WIN32)
+    # GUI app without a console window, entered through the standard main()
+    target_link_options(${PROJECT_NAME} PRIVATE
+        "SHELL:-Xlinker /SUBSYSTEM:WINDOWS" "SHELL:-Xlinker /ENTRY:mainCRTStartup")
+endif()
+
+# Swift core library
+add_subdirectory(core)
+target_link_libraries(${PROJECT_NAME} PRIVATE QVCore)
+add_dependencies(${PROJECT_NAME} QVCoreHeader)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Svg)
 

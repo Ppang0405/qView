@@ -3,13 +3,11 @@
 #include "qvwin32functions.h"
 #include "qvcocoafunctions.h"
 #include "qvlinuxx11functions.h"
-#include <cstring>
-#include <random>
+#include "qvcore.h"
 #include <QMessageBox>
 #include <QDir>
 #include <QUrl>
 #include <QSettings>
-#include <QCollator>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QIcon>
 #include <QGuiApplication>
@@ -340,84 +338,27 @@ void QVImageCore::updateFolderInfo(QString dirPath)
     const bool shouldSort = lastDirInfo != dirInfo;
     lastDirInfo = dirInfo;
 
-    const auto sortFn = [&]() {
-        // Sorting
-        switch (dirInfo.sortMode) {
-        case 0: {
-            // Natural sorting
-            QCollator collator;
-            collator.setNumericMode(true);
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return collator.compare(file1.fileName, file2.fileName) > 0;
-                          else
-                              return collator.compare(file1.fileName, file2.fileName) < 0;
-                      });
-            break;
-        }
-        case 1:
-            // Date modified
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return file1.lastModified < file2.lastModified;
-                          else
-                              return file1.lastModified > file2.lastModified;
-                      });
-            break;
-        case 2:
-            // Date created
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return file1.lastCreated < file2.lastCreated;
-                          else
-                              return file1.lastCreated > file2.lastCreated;
-                      });
-            break;
-        case 3:
-            // Size
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return file1.size < file2.size;
-                          else
-                              return file1.size > file2.size;
-                      });
-            break;
-        case 4: {
-            // Type
-            QCollator collator;
-            std::sort(currentFileDetails.folderFileInfoList.begin(),
-                      currentFileDetails.folderFileInfoList.end(),
-                      [&](const CompatibleFile &file1, const CompatibleFile &file2) {
-                          if (dirInfo.sortDescending)
-                              return collator.compare(file1.mimeType, file2.mimeType) > 0;
-                          else
-                              return collator.compare(file1.mimeType, file2.mimeType) < 0;
-                      });
-            break;
-        }
-        case 5:
-            // Random
-            std::shuffle(currentFileDetails.folderFileInfoList.begin(),
-                         currentFileDetails.folderFileInfoList.end(),
-                         std::default_random_engine(
-                                 std::chrono::system_clock::now().time_since_epoch().count()));
-            break;
-        default:
-            Q_ASSERT(false);
-            break;
-        }
-    };
+    // Sorting is implemented in Swift (core/Sources/QVCore/FolderSort.swift)
+    const auto sortMode = QVCore::FolderSortMode::init(dirInfo.sortMode);
+    Q_ASSERT(sortMode);
+    if (shouldSort && sortMode) {
+        auto &fileList = currentFileDetails.folderFileInfoList;
 
-    if (shouldSort) {
-        sortFn();
+        QVFolderEntryList entries;
+        entries.reserve(fileList.size());
+        for (const CompatibleFile &file : std::as_const(fileList)) {
+            entries.push_back({ file.fileName.toStdString(), file.mimeType.toStdString(),
+                                file.lastModified, file.lastCreated, file.size });
+        }
+
+        const QVIndexList order =
+                QVCore::sortFolderEntries(entries, sortMode.get(), dirInfo.sortDescending);
+
+        QList<CompatibleFile> sortedList;
+        sortedList.reserve(fileList.size());
+        for (const int64_t index : order)
+            sortedList.append(fileList.at(index));
+        fileList = sortedList;
     }
 
     // Set current file index variable
@@ -578,42 +519,9 @@ QColorSpace QVImageCore::detectDisplayColorSpace() const
 // Workaround for QTBUG-125241
 bool QVImageCore::removeTinyDataTagsFromIccProfile(QByteArray &profile)
 {
-    const int offsetTagCount = 128;
-    const qsizetype length = profile.length();
-    qsizetype offset = offsetTagCount;
-    char *data = profile.data();
-    bool foundTinyData = false;
-    // read tag count
-    if (length - offset < 4)
-        return false;
-    quint32 tagCount = qFromBigEndian<quint32>(data + offset);
-    offset += 4;
-    // so we don't have to worry about overflows
-    if (tagCount > 99999)
-        return false;
-    // loop through tags
-    if (length - offset < qsizetype(tagCount * 12))
-        return false;
-    while (tagCount) {
-        tagCount -= 1;
-        const quint32 dataSize = qFromBigEndian<quint32>(data + offset + 8);
-        if (dataSize >= 12) {
-            // this tag is fine
-            offset += 12;
-            continue;
-        }
-        // qt will fail on this tag, remove it
-        foundTinyData = true;
-        if (tagCount) {
-            // shift subsequent tags back
-            std::memmove(data + offset, data + offset + 12, tagCount * 12);
-        }
-        // zero fill gap at end
-        std::memset(data + offset + (tagCount * 12), 0, 12);
-        // decrement tag count
-        qToBigEndian(qFromBigEndian<quint32>(data + offsetTagCount) - 1, data + offsetTagCount);
-    }
-    return foundTinyData;
+    // Implemented in Swift (core/Sources/QVCore/IccProfile.swift), on the bytes in place
+    return QVCore::removeTinyDataTagsFromIccProfile(
+            QVMutableBytes(reinterpret_cast<uint8_t *>(profile.data()), profile.size()));
 }
 #endif
 
